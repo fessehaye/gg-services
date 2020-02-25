@@ -1,2 +1,0 @@
-# gg-services
-Begin app
