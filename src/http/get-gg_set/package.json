@@ -1,0 +1,7 @@
+{
+  "name": "begin-app-get-gg_set",
+  "dependencies": {
+    "@architect/functions": "latest",
+    "@begin/data": "latest"
+  }
+}
