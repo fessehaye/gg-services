@@ -2,6 +2,8 @@
   "name": "begin-app-get-challonge-000slug",
   "dependencies": {
     "@architect/functions": "latest",
-    "@begin/data": "latest"
+    "@begin/data": "latest",
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0"
   }
 }
