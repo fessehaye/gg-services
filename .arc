@@ -5,6 +5,7 @@ align-lby
 
 @http
 get /
+get /gg_info
 
 @tables
 data
