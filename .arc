@@ -7,6 +7,7 @@ align-lby
 get /
 get /gg_info
 get /gg_set
+get /challonge/:slug
 
 @tables
 data
