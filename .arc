@@ -8,6 +8,7 @@ get /
 get /gg_info
 get /gg_set
 get /challonge/:slug
+get /challonge-part/:slug
 
 @tables
 data
