@@ -5,7 +5,6 @@ align-lby
 
 @http
 get /
-post /challonge
 
 @tables
 data
