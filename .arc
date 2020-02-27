@@ -6,7 +6,6 @@ align-lby
 @http
 get /
 get /gg_info
-get /challonge
 get /gg_set
 
 @tables
