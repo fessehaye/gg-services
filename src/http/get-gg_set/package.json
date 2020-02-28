@@ -2,6 +2,10 @@
   "name": "begin-app-get-gg_set",
   "dependencies": {
     "@architect/functions": "latest",
-    "@begin/data": "latest"
+    "@begin/data": "latest",
+    "apollo-boost": "^0.4.7",
+    "cross-fetch": "^3.0.4",
+    "dotenv": "^8.2.0",
+    "graphql": "^14.6.0"
   }
 }

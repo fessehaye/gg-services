@@ -1,39 +1,66 @@
-// Enable secure sessions, express-style middleware, and more:
-// https://docs.begin.com/en/functions/http/
-//
-// let begin = require('@architect/functions')
-
-let html = `
-<!doctype html>
-<html lang=en>
-  <head>
-    <meta charset=utf-8>
-    <title>Hi!</title>
-    <link rel="stylesheet" href="https://static.begin.app/starter/default.css">
-    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
-  </head>
-  <body>
-    <h1 class="center-text">
-      Hello world!
-    </h1>
-    <p class="center-text">
-      Your new route is ready to go!
-    </p>
-    <p class="center-text">
-      Learn more about building <a href="https://docs.begin.com/en/functions/http/" class="link" target="_blank">Begin HTTP functions here</a>.
-    </p>
-  </body>
-</html>
-`
-
 // HTTP function
+require("cross-fetch/polyfill");
+const ApolloClient = require("apollo-boost").default;
+const gql = require("apollo-boost").gql;
+require("dotenv").config();
+
 exports.handler = async function http(req) {
-  console.log(req)
-  return {
-    headers: {
-      'content-type': 'text/html; charset=utf8',
-      'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
-    },
-    body: html
+  try {
+    const GET_EVENT_SETS = gql`
+      query eventQuery($slug: String, $page: Int) {
+        event(slug: $slug) {
+          sets(sortType: STANDARD, perPage: 20, page: $page) {
+            nodes {
+              phaseGroupId
+              fullRoundText
+              slots {
+                entrant {
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const client = new ApolloClient({
+      uri: "https://api.smash.gg/gql/alpha",
+      request: operation => {
+        operation.setContext({
+          headers: {
+            authorization: `Bearer ${process.env.GG_API}`
+          }
+        });
+      }
+    });
+
+    const eventInfo = await client.query({
+      query: GET_EVENT_SETS,
+      variables: {
+        slug: req.queryStringParameters.slug,
+        page: parseInt(req.queryStringParameters.page) || 1
+      }
+    });
+
+    const body = JSON.stringify(eventInfo.data);
+
+    return {
+      headers: {
+        "cache-control":
+          "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0"
+      },
+      statusCode: 200,
+      body
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      }, // CORS requirement
+      statusCode: 300,
+      body: '{"Error":"No Event Data Available"}'
+    };
   }
-}
+};
