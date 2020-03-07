@@ -6,17 +6,9 @@ require("dotenv").config();
 
 exports.handler = async function http(req) {
   try {
-    const GET_EVENT_COUNT = gql`
+    const GET_EVENT_COUNT = gql `
       query eventQuery($slug: String) {
         event(slug: $slug) {
-          phases {
-            name
-            id
-          }
-          phaseGroups {
-            id
-            phaseId
-          }
           sets(sortType: STANDARD, perPage: 20) {
             pageInfo {
               total
@@ -50,8 +42,7 @@ exports.handler = async function http(req) {
 
     return {
       headers: {
-        "cache-control":
-          "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0"
+        "cache-control": "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0"
       },
       statusCode: 200,
       body
